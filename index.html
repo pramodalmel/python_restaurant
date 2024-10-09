@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Restaurant - Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('static/images/bgimage.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: white;
+        }
+        .container {
+            margin-top: 30px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #fd7e14;
+            font-family: Arial, sans-serif;
+            text-shadow: 2px 2px 5px rgba(69, 33, 33, 0.5);
+        }
+        .section {
+            display: none; /* Hide all sections by default */
+        }
+        .active {
+            display: block; /* Show active section */
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        .bill-details {
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Python Restaurant</h1>
+        <nav>
+            <ul>
+                <li><a href="javascript:void(0);" onclick="showSection('home')">HOME</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('bill')">BILL</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('about')">ABOUT</a></li>
+                <li><a href="javascript:void(0);" onclick="showSection('contact')">CONTACT</a></li>
+            </ul>
+        </nav>
+
+        <!-- Home Section -->
+        <div id="home" class="section active text-center">
+            <p style="color:aqua;">Enjoy a variety of delicious dishes at affordable prices.</p>
+        </div>
+
+        <!-- Bill Section -->
+        <div id="bill" class="section">
+            <h2 class="text-center">Restaurant Bill</h2>
+            <form id="billForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="Dosa">Dosa (Rs. 45)</label>
+                            <input type="number" class="form-control" id="Dosa" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="Pongal">Pongal (Rs. 55)</label>
+                            <input type="number" class="form-control" id="Pongal" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="Vada">Vada (Rs. 20)</label>
+                            <input type="number" class="form-control" id="Vada" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="Puri">Puri (Rs. 50)</label>
+                            <input type="number" class="form-control" id="Puri" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="Idli">Idli (Rs. 30)</label>
+                            <input type="number" class="form-control" id="Idli" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="Tea">Tea (Rs. 15)</label>
+                            <input type="number" class="form-control" id="Tea" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="Coffee">Coffee (Rs. 20)</label>
+                            <input type="number" class="form-control" id="Coffee" value="0" min="0">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="calculateBill()">Calculate</button>
+                    </div>
+
+                    <!-- Bill Details Section -->
+                    <div class="col-md-6 bill-details" id="billDetails">
+                        <h4>Bill Details</h4>
+                        <p><strong>Cost:</strong> Rs. <span id="totalCost"></span></p>
+                        <p><strong>Service Charge (10%):</strong> Rs. <span id="serviceCharge"></span></p>
+                        <p><strong>Tax (18%):</strong> Rs. <span id="tax"></span></p>
+                        <p><strong>Total Amount:</strong> Rs. <span id="totalAmount"></span></p>
+                        <button class="btn btn-success" onclick="clearBill()">Okay</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" class="section">
+            <h2>About Python Restaurant</h2>
+            <p>We are a family-owned restaurant known for serving delicious South Indian dishes. Our mission is to provide an unforgettable dining experience with authentic flavors and a warm atmosphere.</p>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact" class="section">
+            <h2>Contact Us</h2>
+            <p>Email: <a href="mailto:pramodalmel@gmail.com" style="color: white;">pramodalmel@gmail.com</a></p>
+            <p>Phone: <a href="tel:+918088850229" style="color: white;">+91 8088850229</a></p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((sec) => {
+                sec.classList.remove('active');
+            });
+            // Show the selected section
+            document.getElementById(section).classList.add('active');
+        }
+
+        function clearBill() {
+            document.getElementById('billDetails').style.display = 'none';
+            document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
+        }
+
+        function calculateBill() {
+            const prices = { Dosa: 45, Pongal: 55, Vada: 20, Puri: 50, Idli: 30, Tea: 15, Coffee: 20 };
+            let totalCost = 0;
+            for (let item in prices) {
+                totalCost += document.getElementById(item).value * prices[item];
+            }
+            const serviceCharge = totalCost * 0.1;
+            const tax = (totalCost + serviceCharge) * 0.18;
+            const totalAmount = totalCost + serviceCharge + tax;
+
+            document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+            document.getElementById('serviceCharge').innerText = serviceCharge.toFixed(2);
+            document.getElementById('tax').innerText = tax.toFixed(2);
+            document.getElementById('totalAmount').innerText = totalAmount.toFixed(2);
+
+            document.getElementById('billDetails').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
